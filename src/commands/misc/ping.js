@@ -2,7 +2,7 @@ const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
     name: 'ping',
-    description: 'Pong',
+    description: 'Pong!',
 
     callback: (client, interaction) => {
         const embed = new EmbedBuilder()

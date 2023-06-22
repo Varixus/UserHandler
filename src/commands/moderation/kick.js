@@ -7,23 +7,23 @@ module.exports = {
      * @param {Interaction} interaction
      */
   
-    name: 'ban',
-    description: 'Bans a member from this server.',
+    name: 'kick',
+    description: 'Kicks a member from this server.',
     options: [
         {
             name: 'target-user',
-            description: 'The user you want to ban.',
+            description: 'The user you want to kick.',
             type: ApplicationCommandOptionType.Mentionable,
             required: true
         },
         {
             name: 'reason',
-            description: 'The reason you want to ban.',
+            description: 'The reason you want to kick.',
             type: ApplicationCommandOptionType.String
         }
     ],
-    permissionsRequired: [PermissionFlagsBits.BanMembers],
-    botPermissions: [PermissionFlagsBits.BanMembers],
+    permissionsRequired: [PermissionFlagsBits.KickMembers],
+    botPermissions: [PermissionFlagsBits.KickMembers],
 
     callback: async (client, interaction) => {
         const targetUserId = interaction.options.get('target-user').value;
@@ -40,7 +40,7 @@ module.exports = {
         }
     
         if (targetUser.id === interaction.guild.ownerId) {
-            await interaction.editReply("You can't ban that user because they're the server owner.");
+            await interaction.editReply("You can't kick that user because they're the server owner.");
             return;
         }
     
@@ -49,29 +49,29 @@ module.exports = {
         const botRolePosition = interaction.guild.members.me.roles.highest.position;
     
         if (targetUserRolePosition >= requestUserRolePosition) {
-            await interaction.editReply("You can't ban that user because they have the same/higher role than you.");
+            await interaction.editReply("You can't kick that user because they have the same/higher role than you.");
             return;
         }
     
         if (targetUserRolePosition >= botRolePosition) {
-            await interaction.editReply("I can't ban that user because they have the same/higher role than me.");
+            await interaction.editReply("I can't kick that user because they have the same/higher role than me.");
             return;
         }
 
         try {
-            await targetUser.ban({ reason });
+            await targetUser.kick({ reason });
 
             const embed = new EmbedBuilder()
                 .setColor('Red')
-                .setTitle('Ban')
+                .setTitle('Kick')
                 .addFields(
-                    { name: 'User', value: `${targetUser} was banned from the server.`},
+                    { name: 'User', value: `${targetUser} was kicked from the server.`},
                     { name: 'Reason', value: `${reason}` }
                 );
 
             await interaction.editReply({ embeds: [embed] });
         } catch (error) {
-            console.log(`ERROR (ban.js): ${error}`);
+            console.log(`ERROR (kick.js): ${error}`);
         }
     },
 };
