@@ -4,12 +4,12 @@ module.exports = {
     name: 'ping',
     description: 'Pong!',
 
-    callback: (client, interaction) => {
+    callback: async (client, interaction) => {
         const embed = new EmbedBuilder()
             .setColor('#2F3136')
             .setDescription(`Response time: ${client.ws.ping}ms`);
 
-        interaction.reply({
+        await interaction.reply({
             embeds: [embed]
         });
     }

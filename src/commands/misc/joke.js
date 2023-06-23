@@ -4,7 +4,7 @@ module.exports = {
     name: 'joke',
     description: 'Tells you a joke.',
 
-    callback: (client, interaction) => {
+    callback: async (client, interaction) => {
         const jokeStorage = [
             `What did the Buddhist say to the hot dog vendor? "Make me one with everything."`,
             `What do you call a fake noodle? An impasta.`,
@@ -34,7 +34,7 @@ module.exports = {
             .setColor('#2F3136')
             .setDescription(jokeStorage[randomNumber]);
 
-        interaction.reply({
+        await interaction.reply({
             embeds: [embed]
         });
     }

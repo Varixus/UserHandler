@@ -13,7 +13,7 @@ module.exports = {
     ],
 
     callback: async (client, interaction) => {
-        interaction.reply({
+        await interaction.reply({
             content: interaction.options.getString('message'),
             ephemeral: false,
         });
