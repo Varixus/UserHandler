@@ -1,24 +1,14 @@
 const { EmbedBuilder } = require('discord.js');
-const mongoose = require('mongoose');
+const User = require('../../mongooseModels/userModel');
+const checkIfUserStarted = require('../../utils/checkIfUserStarted');
 
 module.exports = {
     name: 'start',
-    description: 'This command will allow you to play the economy game.',
+    description: '💸 This command will allow you to play the economy game. 💸',
 
     callback: async (client, interaction) => {
         try {
-
-            const userSchema = new mongoose.Schema({
-                name: String,
-                userID: String,
-                guildID: String,
-                moneyAmount: Number,
-            }, { collection: 'users', database: 'economyGame' });
-
-            const User = mongoose.models.User || mongoose.model('User', userSchema);
-
-            if(await User.countDocuments( { userID: interaction.user.id} ) > 0 && await User.countDocuments( { guildID: interaction.guild.id} ) > 0){
-                interaction.reply('You are already registered.')
+            if(!checkIfUserStarted(interaction)){
                 return;
             }
     
@@ -39,9 +29,10 @@ module.exports = {
                     { name: 'GUILD ID', value: user.guildID, inline: true }
                 );
 
-            interaction.reply({ embeds: [embed] });
+            await interaction.reply({ embeds: [embed] });
+
         } catch (error) {
-            console.log(`ERROR (setupPlayer.js): ${error}`);
+            console.log(`ERROR (start.js): ${error}`);
         }
     }
 }
