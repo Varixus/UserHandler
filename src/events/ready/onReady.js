@@ -9,6 +9,8 @@ module.exports = async (client) => {
         guild.commands.set(getLocalCommands());
     }
 
+    client.application.commands.set([]);
+
     client.user.setActivity({
         name: "geheime Schmuddelfilme",
         type: ActivityType.Streaming,
