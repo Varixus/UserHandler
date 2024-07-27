@@ -1,7 +1,7 @@
 const Guild = require('../../mongooseModels/guildModel');
 
 module.exports = async (client, guild) => {
-    console.log('Bot was added to guild ' + guild.id);
+    console.log('Database entry for guild ' + guild.id + ' was created');
     const guildDoc = new Guild({
         guildID: guild.id,
         currencySymbol: '$',
