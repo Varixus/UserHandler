@@ -1,6 +1,6 @@
 const { EmbedBuilder } = require('discord.js');
 const User = require('../../mongooseModels/userModel');
-const checkIfUserStarted = require('../../utils/checkIfUserStarted');
+const hasUserStarted = require('../../utils/hasUserStarted');
 
 module.exports = {
     name: 'start',
@@ -8,7 +8,7 @@ module.exports = {
 
     callback: async (client, interaction) => {
         try {
-            if(!checkIfUserStarted(interaction)){
+            if(await hasUserStarted(interaction, false)){
                 return;
             }
     

@@ -3,8 +3,8 @@ const User = require('../../mongooseModels/userModel');
 const hasUserStarted = require('../../utils/hasUserStarted');
 
 module.exports = {
-    name: 'work',
-    description: '💸 You will get to work. 💸',
+    name: 'money',
+    description: '💸 Take a look at your bank account. 💸',
 
     callback: async (client, interaction) => {
         try {
@@ -15,14 +15,9 @@ module.exports = {
             const guildData = await Guild.findOne( { guildID: interaction.guild.id });
             const userData = await User.findOne({ userID: interaction.user.id });
 
-            const randomAmount = Math.floor(Math.random() * (guildData.workMax - guildData.workMin)) + guildData.workMin;
-
-            await User.findOneAndUpdate({ userID: interaction.user.id }, { moneyAmount: userData.moneyAmount +  randomAmount });
-            await interaction.reply(`You made ${randomAmount}${guildData.currencySymbol}`);
-
-
+            await interaction.reply(`You have ${userData.moneyAmount}${guildData.currencySymbol}`);
         } catch (error) {
-            console.log(`ERROR (work.js): ${error}`);
+            console.log(`ERROR (money.js): ${error}`);
         }
     }
 }

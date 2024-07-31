@@ -1,4 +1,5 @@
-const { ApplicationCommandOptionType } = require('discord.js');
+const { ApplicationCommandOptionType, EmbedBuilder } = require('discord.js');
+const Guild = require('../../mongooseModels/guildModel');
 
 module.exports = {
     name: 'setwork',
@@ -6,17 +7,40 @@ module.exports = {
     options: [
         {
             name: 'option',
-            description: 'Minimal or maximum amount.',
+            description: 'Minimal (min) or maximum (max) amount.',
+            required: true,
+            type: ApplicationCommandOptionType.String,
+        },
+        {
+            name: 'amount',
+            description: 'Amount to change min or max to.',
             required: true,
             type: ApplicationCommandOptionType.String,
         }
     ],
+    permissionsRequired: ['ADMINISTRATOR'], 
 
     callback: async (client, interaction) => {
         try {
+            const guildData = await Guild.findOne( { guildID: interaction.guild.id });
+            const option = interaction.options.getString('option');
+            const amount = Number(interaction.options.getString("amount"));
 
-            // code
-
+            if(option == "min" && guildData.workMax > amount && !isNaN(amount)){
+                await Guild.findOneAndUpdate({ guildID: interaction.guild.id }, { workMin: amount });
+                await interaction.reply(`Minimum work reward amount set to ${amount}.`);
+            } else if(option == "max" && guildData.workMin < amount && !isNaN(amount)){
+                await Guild.findOneAndUpdate({ guildID: interaction.guild.id }, { workMax: amount });
+                await interaction.reply(`Maximum work reward amount set to ${amount}.`);
+            } else {
+                const embed = new EmbedBuilder()
+                .setTitle('⚙️ Economy Game Settings ⚙️')
+                .setColor('Red')
+                .setDescription(`ERROR: Given amount is invalid.`);
+    
+                interaction.reply({ embeds: [embed], ephemeral: true });
+                return;
+            }   
         } catch (error) {
             console.log(`ERROR (work.js): ${error}`);
         }
