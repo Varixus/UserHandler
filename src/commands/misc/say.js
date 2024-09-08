@@ -13,9 +13,14 @@ module.exports = {
     ],
 
     callback: async (client, interaction) => {
-        await interaction.reply({
-            content: interaction.options.getString('message'),
-            ephemeral: false,
-        });
+        try {
+            await interaction.reply({
+                content: interaction.options.getString('message'),
+                ephemeral: false,
+            });   
+        } catch (error) {
+            console.error(`ERROR (say.js): ${error}`);
+            await interaction.reply('I couldn\'t say that unfortunately.');
+        }
     }
 }

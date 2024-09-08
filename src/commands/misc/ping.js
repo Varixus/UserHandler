@@ -5,12 +5,15 @@ module.exports = {
     description: 'Pong!',
 
     callback: async (client, interaction) => {
-        const embed = new EmbedBuilder()
-            .setColor('#2F3136')
-            .setDescription(`Response time: ${client.ws.ping}ms`);
+        try {
+            const embed = new EmbedBuilder()
+                .setColor('#2F3136')
+                .setDescription('Pong!');
 
-        await interaction.reply({
-            embeds: [embed]
-        });
+            await interaction.reply({ embeds: [embed] });
+        } catch (error) {
+            console.error(`ERROR (ping.js): ${error}`);
+            await interaction.reply('Sorry, I couldn\'t fetch the ping for you right now.');
+        }
     }
 }
