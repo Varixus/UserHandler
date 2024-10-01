@@ -9,6 +9,7 @@ module.exports = {
     callback: async (client, interaction) => {
         try {
             if(await hasUserStarted(interaction, false)){
+                await interaction.reply('You have already started your game on this server.')
                 return;
             }
     

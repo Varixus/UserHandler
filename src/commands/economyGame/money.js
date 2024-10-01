@@ -1,3 +1,4 @@
+const { EmbedBuilder } = require('discord.js');
 const Guild = require('../../mongooseModels/guildModel');
 const User = require('../../mongooseModels/userModel');
 const hasUserStarted = require('../../utils/hasUserStarted');
@@ -15,7 +16,12 @@ module.exports = {
             const guildData = await Guild.findOne( { guildID: interaction.guild.id });
             const userData = await User.findOne({ userID: interaction.user.id });
 
-            await interaction.reply(`You have ${userData.moneyAmount}${guildData.currencySymbol}`);
+            const embed = new EmbedBuilder()
+                .setTitle('💸 Bank Account 💸')
+                .setColor('Yellow')
+                .setDescription(`You have ${userData.moneyAmount}${guildData.currencySymbol} in your bank account.`);
+
+            await interaction.reply({embeds: [embed]});
         } catch (error) {
             console.log(`ERROR (money.js): ${error}`);
         }

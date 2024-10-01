@@ -16,6 +16,8 @@ module.exports = async (client) => {
         guild.commands.set(getLocalCommands());
     }
 
+    // TODO: check if all guild entries in database have associated guild in guild cache (delete junk data)
+
     client.application.commands.set([]);
 
     client.user.setActivity({

@@ -15,7 +15,7 @@ module.exports = {
             name: 'amount',
             description: 'Amount to change min or max to.',
             required: true,
-            type: ApplicationCommandOptionType.String,
+            type: ApplicationCommandOptionType.Number,
         }
     ],
     permissionsRequired: ['ADMINISTRATOR'], 
@@ -24,12 +24,12 @@ module.exports = {
         try {
             const guildData = await Guild.findOne( { guildID: interaction.guild.id });
             const option = interaction.options.getString('option');
-            const amount = Number(interaction.options.getString("amount"));
+            const amount = interaction.options.getNumber('amount');
 
-            if(option == "min" && guildData.workMax > amount && !isNaN(amount)){
+            if(option === 'min' && amount <= guildData.workMax){
                 await Guild.findOneAndUpdate({ guildID: interaction.guild.id }, { workMin: amount });
                 await interaction.reply(`Minimum work reward amount set to ${amount}.`);
-            } else if(option == "max" && guildData.workMin < amount && !isNaN(amount)){
+            } else if(option === 'max' && guildData.workMin <= amount){
                 await Guild.findOneAndUpdate({ guildID: interaction.guild.id }, { workMax: amount });
                 await interaction.reply(`Maximum work reward amount set to ${amount}.`);
             } else {
